@@ -48,6 +48,9 @@ export function activate(context: vscode.ExtensionContext) {
 					panel.webview.postMessage({command: 'chatResponse', text: `Error: ${String(err)}`});
 				}
 			}
+			if(message.command == 'switch'){
+				console.log("switching model!");
+			}
 		})
 	})
 
@@ -70,20 +73,32 @@ function getWebviewContent(): string {
 			<h2>Chat with Deepseek</h2>
 			<textarea id="prompt" rows="3" placeholder="ask something..."></textarea> <br />
 			<button id="askbtn">Ask!</button>
+			<select id="model">
+				<option value ="deepseek-r1:1.5b">1.5b model</option>
+				<option value="deepseek-r1:7b">7b model</option>
+				<option value="deepseek-r1:8b">8b model</option>
+			</select>
 			<div id="response"></div>
 			<script>
 				const vscode = acquireVsCodeApi();
-	
+
 				document.getElementById('askbtn').addEventListener('click', () => {
 					const text = document.getElementById('prompt').value;
-					vscode.postMessage({command: 'chat', text});
+					vscode.postMessage({command: 'chat', text: text});
 				});
 
+				document.getElementById("model").addEventListener("change", (event) => {
+					console.log("changing model!");
+					const model = event.target.value;
+					vscode.postMessage({command: 'switch', text: model});
+				});
+
+
 				window.addEventListener('message', event => {
-					const {command, text} = event.data;
-					if(command === 'chatResponse'){
-						document.getElementById('response').innerText = text;
-					}
+						const {command, text} = event.data;
+						if(command === 'chatResponse'){
+							document.getElementById('response').innerText = text;
+						}
 				});
 			</script>
 		</body>

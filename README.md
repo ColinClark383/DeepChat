@@ -35,6 +35,10 @@ Please Ignore Input color command. This is just a simple function to get me fami
 
 Initial release. Functionality for chatting with DeepSeek 1.5b model.
 
+### 1.0.1
+
+Fixed typos in extension code
+
 
 
 ---
